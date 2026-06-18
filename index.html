@@ -25,29 +25,24 @@
 
     <main id="main-content">
   
-  <section class="hero">
-    <h1>Hi, I'm Pardhiv. I Build Accessible Web Experiences.</h1>
-    <p>I'm a frontend developer specializing in semantic HTML5...</p>
-    <a href="contact.html" class="btn">Work With Me</a>
-  </section>
+  <section aria-labelledby="todo-heading" style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 3rem;">
+    <h2 id="todo-heading">Task Manager Application</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Demonstrating dynamic DOM manipulation and localStorage states.</p>
 
-  <section aria-labelledby="featured-work">
-    <h2 id="featured-work">Featured Work</h2>
-    
-    <div class="projects-grid">
-      
-      <article class="project-card">
-        <h3>Accessible E-Commerce Platform</h3>
-        <p>A fully semantic shopping experience built adhering strictly to WCAG guidelines.</p>
-        <a href="#">View Code &rarr;</a>
-      </article>
+    <div class="todo-app">
+      <form id="todo-form" style="max-width: 100%; display: flex; gap: 1rem; margin: 1rem 0;">
+        <input type="text" id="todo-input" placeholder="What needs to be done?" required style="flex: 1;">
+        <button type="submit">Add Task</button>
+      </form>
 
-      <article class="project-card">
-        <h3>Analytics Dashboard</h3>
-        <p>A responsive dashboard component tracking key performance metrics dynamically.</p>
-        <a href="#">View Code &rarr;</a>
-      </article>
+      <div class="todo-filters" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+      </div>
 
+      <ul id="todo-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+        </ul>
     </div>
   </section>
 
@@ -56,6 +51,6 @@
     <footer>
         <p>&copy; 2026 Pardhiv Developer. All rights reserved.</p>
     </footer>
-
+<script src="app.js"></script>
 </body>
 </html>
