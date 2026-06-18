@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pardhiv Developer | Portfolio</title>
+    
+    <meta name="description" content="Accessible frontend developer portfolio.">
+    <link rel="canonical" href="https://yourdomain.com/">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+   <header>
+        <div class="logo">PardhivDev</div>
+        <nav aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html" aria-current="page">Home</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        
+        <!-- 1. HERO SECTION: Uses a distinct heading id for accessiblity labeling -->
+        <section aria-labelledby="hero-heading" style="padding: 40px 0;">
+            <h1 id="hero-heading">Hi, I'm Pardhiv. I Build Accessible Web Experiences.</h1>
+            <p>I'm a frontend developer specializing in semantic HTML5, clean CSS, and inclusive design that works for everyone.</p>
+            <a href="contact.html" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #333; color: #fff; text-decoration: none; font-weight: bold;">Work With Me</a>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
+
+        <!-- 2. PROJECTS SECTION: Every article is self-contained -->
+        <section aria-labelledby="projects-heading" style="padding: 20px 0;">
+            <h2 id="projects-heading">Featured Work</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px;">
+                
+                <!-- Project Card 1 -->
+                <article style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px;">
+                    <h3>Accessible E-Commerce Platform</h3>
+                    <p>A fully semantic shopping experience built adhering strictly to WCAG guidelines for screen readers and keyboard navigation.</p>
+                    <!-- Accessible Link: aria-label gives complete context to screen readers instead of just saying "View Code" -->
+                    <a href="https://github.com" aria-label="View E-Commerce platform source code on GitHub" style="color: #0066cc; font-weight: bold;">View Code &rarr;</a>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Pardhiv Developer. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

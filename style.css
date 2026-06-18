@@ -1,0 +1,51 @@
+/* --- Basic Page Look --- */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 40px auto;
+    max-width: 800px;
+    padding: 0 20px;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 15px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    padding: 0;
+}
+
+/* --- Crucial Accessibility Focus Styles --- */
+
+/* 1. Hide the skip link off-screen by default */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 10px;
+    background: #000;
+    color: #fff;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 100;
+}
+
+/* Move the skip link onto the screen when tabbed onto */
+.skip-link:focus {
+    top: 10px;
+}
+
+/* 2. Highlight focused elements for keyboard users */
+a:focus {
+    outline: 4px solid #ffbf47; /* Bright amber outline */
+    outline-offset: 2px;
+}
