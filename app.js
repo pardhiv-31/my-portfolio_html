@@ -1,12 +1,44 @@
 // ==========================================================================
-// CORE DATA STATE CONFIGURATION
+// 1. PROJECT ARCHITECTURE: CLIENT-SIDE ROUTER ENGINE
+// ==========================================================================
+const navLinks = document.querySelectorAll('.nav-link');
+const routerViews = document.querySelectorAll('.router-view');
+
+function handleRouting(targetViewId) {
+  // Update Navigation active states
+  navLinks.forEach(link => {
+    if (link.getAttribute('data-target') === targetViewId) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
+  // Switch visible sections smoothly in the DOM
+  routerViews.forEach(view => {
+    if (view.id === `view-${targetViewId}`) {
+      view.classList.add('active');
+    } else {
+      view.classList.remove('active');
+    }
+  });
+}
+
+// Bind routing listeners
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetView = link.getAttribute('data-target');
+    handleRouting(targetView);
+  });
+});
+
+// ==========================================================================
+// 2. COMPONENT MODULE: STATE-MANAGED TASK ENGINE (CRUD)
 // ==========================================================================
 let todos = JSON.parse(localStorage.getItem('todos')) || [];
 let currentFilter = 'all';
 
-// ==========================================================================
-// TO-DO APPLICATION CONTROLLER
-// ==========================================================================
 const todoForm = document.getElementById('todo-form');
 const todoInput = document.getElementById('todo-input');
 const todoList = document.getElementById('todo-list');
@@ -17,8 +49,8 @@ function saveTodos() {
 }
 
 function renderTodos() {
-  if (!todoList) return; 
-  todoList.innerHTML = ''; 
+  if (!todoList) return;
+  todoList.innerHTML = '';
 
   const filteredTodos = todos.filter(todo => {
     if (currentFilter === 'active') return !todo.completed;
@@ -71,7 +103,7 @@ if (todoList) {
   });
 }
 
-if (filterButtons && filterButtons.length > 0) {
+if (filterButtons) {
   filterButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       filterButtons.forEach(b => b.classList.remove('active'));
@@ -82,13 +114,8 @@ if (filterButtons && filterButtons.length > 0) {
   });
 }
 
-if (todoList) {
-  renderTodos();
-}
-
-
 // ==========================================================================
-// ASYNCHRONOUS WEATHER DASHBOARD ENGINE (REST API INTEGRATION)
+// 3. COMPONENT MODULE: ASYNCHRONOUS WEATHER ANALYTICS ENGINE
 // ==========================================================================
 const cityInput = document.getElementById('weather-city');
 const searchBtn = document.getElementById('weather-search-btn');
@@ -108,8 +135,8 @@ async function fetchWeatherData() {
   }
 
   if (statusDiv) {
-    statusDiv.style.color = "#f59e0b"; 
-    statusDiv.textContent = "Connecting to API and fetching live metrics...";
+    statusDiv.style.color = "#f59e0b";
+    statusDiv.textContent = "Connecting to REST API endpoints...";
   }
   if (displayDiv) displayDiv.style.opacity = "0.4";
 
@@ -117,11 +144,11 @@ async function fetchWeatherData() {
     const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`;
     const geoResponse = await fetch(geoUrl);
     
-    if (!geoResponse.ok) throw new Error("Network response failed.");
+    if (!geoResponse.ok) throw new Error("Geocoding payload collection failure.");
     const geoData = await geoResponse.json();
 
     if (!geoData.results || geoData.results.length === 0) {
-      throw new Error(`City "${cityName}" not found. Check spelling.`);
+      throw new Error(`Location targets for "${cityName}" returned empty.`);
     }
 
     const { latitude, longitude, name, country } = geoData.results[0];
@@ -129,7 +156,7 @@ async function fetchWeatherData() {
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m`;
     const weatherResponse = await fetch(weatherUrl);
     
-    if (!weatherResponse.ok) throw new Error("Weather metrics fetch failed.");
+    if (!weatherResponse.ok) throw new Error("Weather analytics telemetry stream failure.");
     const weatherData = await weatherResponse.json();
     const currentMetrics = weatherData.current;
 
@@ -146,18 +173,19 @@ async function fetchWeatherData() {
 
   } catch (error) {
     if (statusDiv) {
-      statusDiv.style.color = "#ef4444"; 
-      statusDiv.textContent = error.message;
+      statusDiv.style.color = "#ef4444";
+      statusDiv.textContent = `Error: ${error.message}`;
     }
     if (displayDiv) displayDiv.style.display = "none";
   }
 }
 
-if (searchBtn) {
-  searchBtn.addEventListener('click', fetchWeatherData);
-}
+if (searchBtn) searchBtn.addEventListener('click', fetchWeatherData);
 if (cityInput) {
   cityInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') fetchWeatherData();
   });
 }
+
+// Initial Core Execution Boot Sequence
+renderTodos();

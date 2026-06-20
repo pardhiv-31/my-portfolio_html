@@ -1,228 +1,293 @@
-/* 1. Global Themes & Variables */
+/* ==========================================================================
+   GLOBAL DESIGN SYSTEMS & TOKENS
+   ========================================================================== */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #1a1a1a;
-  --text-secondary: #666666;
-  --accent: #4f46e5; /* Modern Indigo */
-  --accent-hover: #4338ca;
-  --border-color: #e5e7eb;
-  --max-width: 1100px;
-  --transition: all 0.3s ease;
+  --bg-primary: #0b0f19;
+  --bg-secondary: #151d30;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --text-main: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --border-color: #1e293b;
+  --success: #10b981;
+  --danger: #ef4444;
 }
 
-/* This automatically activates if a user prefers Dark Mode on their device! */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: #0f172a; /* Slate 900 */
-    --bg-secondary: #1e293b; /* Slate 800 */
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-color: #334155;
-  }
-}
-
-/* Base Resets */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
-  transition: var(--transition);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-/* 2. Header & Navigation (Flexbox) */
+
+/* Navigation Layout */
 header {
-  max-width: var(--max-width);
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-color);
 }
 
 .logo {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--text-main);
+  background-color: var(--border-color);
+}
+
+/* ==========================================================================
+   CLIENT ROUTER CORE LAYOUTS
+   ========================================================================== */
+main {
+  flex: 1;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.router-view {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.router-view.active {
+  display: block;
+  opacity: 1;
+}
+
+/* View Header Layouts */
+.component-header {
+  margin-bottom: 2.5rem;
+}
+
+.component-header h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.component-header p {
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   VIEW COMPONENTS: HOME HERO
+   ========================================================================== */
+.hero-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 2.5rem auto;
+  line-height: 1.6;
+}
+
+.tech-badge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.badge {
+  background-color: var(--border-color);
+  color: var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   VIEW COMPONENTS: INPUTS & ACTIONS
+   ========================================================================== */
+input[type="text"] {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.75rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: var(--accent);
+}
+
+button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: var(--accent-hover);
+}
+
+/* ==========================================================================
+   VIEW COMPONENTS: WEATHER SYSTEM
+   ========================================================================== */
+.weather-app {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  border-radius: 16px;
+}
+
+.search-box {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-box input {
+  flex: 1;
+}
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.weather-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.weather-card h4 {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.weather-value {
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--accent);
 }
 
-header ul {
-  display: flex;
-  list-style: none;
-  gap: 1.5rem;
-}
-
-header a {
-  text-decoration: none;
-  color: var(--text-secondary);
-  font-weight: 500;
-  transition: var(--transition);
-}
-
-header a:hover, header a[aria-current="page"] {
-  color: var(--accent);
-}
-/* 3. Main Layout & CSS Grid */
-main {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
-}
-
-.hero {
-  padding: 4rem 0;
-  max-width: 800px;
-}
-
-.hero h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem); 
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-}
-
-.hero p {
-  font-size: 1.25rem;
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: 1fr; 
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.project-card {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 2rem;
-  border-radius: 12px;
-  transition: var(--transition);
-}
-
-.project-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent);
-}
-/* 4. Responsive Media Queries (Mobile-First Architecture) */
-@media (min-width: 768px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-footer {
-  text-align: center;
-  padding: 2rem;
-  margin-top: 4rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  border-top: 1px solid var(--border-color);
-}
-/* 5. Contact Form Architecture */
-form {
-  max-width: 500px;
-  margin: 2rem 0;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 2rem;
-  border-radius: 12px;
-}
-
-form div {
-  margin-bottom: 1.5rem;
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  border-radius: 6px;
-  font-family: inherit;
-  transition: var(--transition);
-}
-
-input:focus, textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-}
-
-/* Let's style your submit button beautifully */
-button[type="submit"], .btn {
-  display: inline-block;
-  background-color: var(--accent);
-  color: #ffffff;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  text-decoration: none;
-}
-
-button[type="submit"]:hover, .btn:hover {
-  background-color: var(--accent-hover);
-}
-/* 6. To-Do App Component Styles */
+/* ==========================================================================
+   VIEW COMPONENTS: TASK ENGINE
+   ========================================================================== */
 .todo-app {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 600px;
+  padding: 2.5rem;
+  border-radius: 16px;
 }
 
-.todo-filters .filter-btn {
-  background: transparent;
+#todo-form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+#todo-form input {
+  flex: 1;
+}
+
+.filter-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+  background-color: transparent;
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: var(--transition);
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
 }
 
-.todo-filters .filter-btn.active, .todo-filters .filter-btn:hover {
-  background-color: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
+.filter-btn:hover, .filter-btn.active {
+  background-color: var(--border-color);
+  color: var(--text-main);
+}
+
+#todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .todo-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
-  padding: 1rem;
+  padding: 1rem 1.2rem;
   border-radius: 8px;
-  transition: var(--transition);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .todo-item.completed span {
   text-decoration: line-through;
   color: var(--text-secondary);
-  opacity: 0.6;
 }
 
 .todo-actions {
@@ -231,42 +296,21 @@ button[type="submit"]:hover, .btn:hover {
 }
 
 .todo-btn {
-  padding: 0.25rem 0.75rem;
+  padding: 0.4rem 0.8rem;
   font-size: 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-  border: none;
 }
 
-.complete-btn { background-color: #10b981; color: white; }
-.delete-btn { background-color: #ef4444; color: white; }
-/* 7. Weather Dashboard Component Layouts */
-.weather-app {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 600px;
-}
+.complete-btn { background-color: var(--success); }
+.delete-btn { background-color: var(--danger); }
 
-.weather-card {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  padding: 1.5rem;
-  border-radius: 8px;
+/* ==========================================================================
+   FOOTER FRAMEWORK
+   ========================================================================== */
+footer {
   text-align: center;
-}
-
-.weather-card h4 {
-  font-size: 0.9rem;
+  padding: 2rem;
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.weather-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--accent);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
 }
