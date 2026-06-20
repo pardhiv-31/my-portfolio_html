@@ -25,24 +25,36 @@
 
     <main id="main-content">
   
-  <section aria-labelledby="todo-heading" style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 3rem;">
-    <h2 id="todo-heading">Task Manager Application</h2>
-    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Demonstrating dynamic DOM manipulation and localStorage states.</p>
+  <section aria-labelledby="weather-heading" style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 3rem;">
+    <h2 id="weather-heading">Real-Time Weather Dashboard</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Fetching real-time nested JSON metrics using async/await expressions.</p>
 
-    <div class="todo-app">
-      <form id="todo-form" style="max-width: 100%; display: flex; gap: 1rem; margin: 1rem 0;">
-        <input type="text" id="todo-input" placeholder="What needs to be done?" required style="flex: 1;">
-        <button type="submit">Add Task</button>
-      </form>
-
-      <div class="todo-filters" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="active">Active</button>
-        <button class="filter-btn" data-filter="completed">Completed</button>
+    <div class="weather-app">
+      <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+        <input type="text" id="weather-city" placeholder="Enter city name (e.g., London, Hyderabad)" style="flex: 1; min-width: 200px;">
+        <button id="weather-search-btn" style="white-space: nowrap; min-width: 150px;">Search Weather</button>
       </div>
 
-      <ul id="todo-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-        </ul>
+      <div id="weather-status" style="margin-bottom: 1rem; color: #f59e0b; font-weight: 500;"></div>
+
+      <div id="weather-display" style="display: none;">
+        <h3 id="display-city-name" style="margin-bottom: 1.5rem; font-size: 1.5rem;">City Name</h3>
+        
+        <div class="weather-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.5rem;">
+          <div class="weather-card">
+            <h4>Temperature</h4>
+            <p id="metric-temp" class="weather-value">--°C</p>
+          </div>
+          <div class="weather-card">
+            <h4>Humidity</h4>
+            <p id="metric-humidity" class="weather-value">--%</p>
+          </div>
+          <div class="weather-card">
+            <h4>Wind Speed</h4>
+            <p id="metric-wind" class="weather-value">-- km/h</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 

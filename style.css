@@ -240,3 +240,33 @@ button[type="submit"]:hover, .btn:hover {
 
 .complete-btn { background-color: #10b981; color: white; }
 .delete-btn { background-color: #ef4444; color: white; }
+/* 7. Weather Dashboard Component Layouts */
+.weather-app {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+}
+
+.weather-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.weather-card h4 {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.weather-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
