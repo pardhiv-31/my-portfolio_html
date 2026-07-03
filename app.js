@@ -1,191 +1,361 @@
-// ==========================================================================
-// 1. PROJECT ARCHITECTURE: CLIENT-SIDE ROUTER ENGINE
-// ==========================================================================
-const navLinks = document.querySelectorAll('.nav-link');
-const routerViews = document.querySelectorAll('.router-view');
+(function () {
+    "use strict";
 
-function handleRouting(targetViewId) {
-  // Update Navigation active states
-  navLinks.forEach(link => {
-    if (link.getAttribute('data-target') === targetViewId) {
-      link.classList.add('active');
-    } else {
-      link.classList.remove('active');
+    // -------------------------------------------------------------------------
+    // PERSISTENT INTERNAL MEMORY ARRAYS (CORE VOLATILE RUNTIME POOLS)
+    // -------------------------------------------------------------------------
+    let workspaceTasks = [];
+    let assetCart = [];
+
+    // -------------------------------------------------------------------------
+    // CENTRALIZED DIRECTORY NAVIGATION APPLICATION MATRIX
+    // -------------------------------------------------------------------------
+    const routes = {
+        '#/': {
+            render: function () {
+                return `
+                    <div class="view-card">
+                        <h1 class="main-heading">System Operations Center</h1>
+                        <p class="description-text">
+                            Welcome to the AeroDesk optimized framework-free execution environment. 
+                            This runtime engine acts as a localized container designed to prove the 
+                            computational efficiency of client-side Document Object Model (DOM) mutation, 
+                            asynchronous external network streams, and zero-latency hardware data pipelines.
+                        </p>
+                        <div class="grid-layout">
+                            <div class="telemetry-card metric-blue">
+                                <h3>Pure Vanilla JS</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.25rem;">Uncompiled Engine Framework</p>
+                            </div>
+                            <div class="telemetry-card metric-emerald">
+                                <h3>&lt; 2.0ms Baseline</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.25rem;">Zero-Refresh UI Manipulation</p>
+                            </div>
+                            <div class="telemetry-card metric-purple">
+                                <h3>Decoupled Shell</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.25rem;">Client-Executed Runspace</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            init: function () {
+                console.log("[ROUTER LOGIC]: Core Workspace Mounted at Index Domain.");
+            }
+        },
+        '#/telemetry': {
+            render: function () {
+                return `
+                    <div class="view-card">
+                        <h1 class="main-heading">Asynchronous Global Telemetry Portal</h1>
+                        <p class="description-text">Real-time external atmospheric metrics pulled securely across HTTPS communication links utilizing native non-blocking Promise pipelines.</p>
+                        <div id="telemetry-display" class="grid-layout">
+                            <div class="telemetry-card status-placeholder">
+                                <div class="loading-spinner"></div>
+                                <p style="color: var(--text-muted);">Establishing secure network socket thread... Ingesting REST stream.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            init: fetchTelemetryData
+        },
+        '#/tasks': {
+            render: function () {
+                return `
+                    <div class="view-card">
+                        <h1 class="main-heading">Sprint Backlog State Controller</h1>
+                        <p class="description-text">Hardware-cached Agile workspace running local data mutation loops inside the browser security sandbox with absolute network independence.</p>
+                        <div class="task-input-section">
+                            <input type="text" id="task-input" autofocus autocomplete="off" placeholder="Input precise objective text string summary string...">
+                            <button id="add-task-btn">Commit Objective</button>
+                        </div>
+                        <div style="margin-bottom: 1.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;" id="task-metric-count">
+                            Metrics Summary: 0 Total Entries
+                        </div>
+                        <ul id="task-list-container" class="task-list"></ul>
+                    </div>
+                `;
+            },
+            init: initTaskManager
+        },
+        '#/marketplace': {
+            render: function () {
+                return `
+                    <div class="view-card">
+                        <h1 class="main-heading">AeroDesk Asset Marketplace</h1>
+                        <p class="description-text">Expand your modular client runtime. Hot-reload premium developer plugins, metrics modules, and icon packs instantly into your core shell application environment.</p>
+                        
+                        <div class="marketplace-container">
+                            <div class="grid-layout" style="margin-top: 0;">
+                                <div class="product-card">
+                                    <div>
+                                        <h3 style="font-size: 1.1rem; color: var(--text-primary);">Terminal Emulator Script</h3>
+                                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem;">Injects a native sandbox CLI window directly inside your Operations tab frame.</p>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                                        <span class="product-price">$45.00</span>
+                                        <button class="buy-btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="window.addAssetToCart('Terminal Emulator', 45)">Add to Cart</button>
+                                    </div>
+                                </div>
+
+                                <div class="product-card">
+                                    <div>
+                                        <h3 style="font-size: 1.1rem; color: var(--text-primary);">System Monitor Engine</h3>
+                                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem;">Advanced memory heap performance tracker for evaluating script processing.</p>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                                        <span class="product-price">$60.00</span>
+                                        <button class="buy-btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="window.addAssetToCart('System Monitor', 60)">Add to Cart</button>
+                                    </div>
+                                </div>
+
+                                <div class="product-card">
+                                    <div>
+                                        <h3 style="font-size: 1.1rem; color: var(--text-primary);">Global JSON Parser Canvas</h3>
+                                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem;">Dynamic tree structured validator to structure complex nested data streams instantly.</p>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                                        <span class="product-price">$25.00</span>
+                                        <button class="buy-btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="window.addAssetToCart('JSON Parser', 25)">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cart-panel">
+                                <h3 style="border-bottom: 1px solid var(--border-glass); padding-bottom: 0.75rem; font-size: 1.1rem;">Selected Package Cart</h3>
+                                <div id="cart-items-wrapper" style="margin: 1rem 0; min-height: 80px;">
+                                    <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 1.5rem;">Cart is currently empty.</p>
+                                </div>
+                                <div style="border-top: 1px solid var(--border-glass); padding-top: 1rem; display: flex; justify-content: space-between; font-weight: 700;">
+                                    <span style="color: var(--text-secondary); font-size: 0.95rem;">Total Balance:</span>
+                                    <span id="cart-total-value" style="color: var(--color-success); font-size: 1.1rem;">$0.00</span>
+                                </div>
+                                <button id="checkout-btn" style="width: 100%; margin-top: 1.5rem; background: var(--color-success); color: var(--bg-base);" onclick="window.processAssetCheckout()">Deploy Modules</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            init: function () {
+                console.log("[MARKETPLACE]: CAPSTONE E-commerce asset pipeline module mounted.");
+                window.renderAssetCart();
+            }
+        }
+    };
+
+    // -------------------------------------------------------------------------
+    // CENTRAL CLIENT-SIDE ROUTER ENGINE ORCHESTRATOR & PERFORMACE MONITOR
+    // -------------------------------------------------------------------------
+    function routerController() {
+        const currentHash = window.location.hash || '#/';
+        const appRoot = document.getElementById('app-root');
+        const activeRoute = routes[currentHash];
+
+        document.querySelectorAll('.nav-link').forEach(function (link) {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === currentHash) {
+                link.classList.add('active');
+            }
+        });
+
+        if (!activeRoute) {
+            appRoot.innerHTML = `
+                <div class="view-card" style="border-left: 4px solid var(--color-danger)">
+                    <h1 style="color: var(--color-danger)">404 - Registry Fault</h1>
+                    <p>The system requested address hash configuration parameter cannot be identified inside the lookup matrix.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // CAPSTONE ATTENTION GRABBER: Start microseconds cycle evaluation timer
+        const renderStartTime = performance.now();
+
+        appRoot.innerHTML = activeRoute.render();
+        activeRoute.init();
+
+        // Calculate paint times and total live nodes instantly
+        setTimeout(function() {
+            const renderEndTime = performance.now();
+            const executionDelta = (renderEndTime - renderStartTime).toFixed(2);
+            const absoluteDomElementsCount = document.getElementsByTagName('*').length;
+            
+            const domElementNode = document.getElementById('diagnostic-dom-count');
+            const speedElementNode = document.getElementById('diagnostic-render-speed');
+            
+            if (domElementNode) domElementNode.innerText = absoluteDomElementsCount;
+            if (speedElementNode) speedElementNode.innerText = `${executionDelta} ms`;
+        }, 10);
     }
-  });
 
-  // Switch visible sections smoothly in the DOM
-  routerViews.forEach(view => {
-    if (view.id === `view-${targetViewId}`) {
-      view.classList.add('active');
-    } else {
-      view.classList.remove('active');
-    }
-  });
-}
+    // -------------------------------------------------------------------------
+    // MODULE 2 LOGIC INTERFACE - ASYNCHRONOUS DATA CAPTURE TRACKS
+    // -------------------------------------------------------------------------
+    async function fetchTelemetryData() {
+        const displayNode = document.getElementById('telemetry-display');
+        try {
+            const apiResponse = await fetch('https://api.open-meteo.com/v1/forecast?latitude=17.3850&longitude=78.4867&current_weather=true');
+            if (!apiResponse.ok) throw new Error('Data stream fetch handshake failed');
+            
+            const dataPayload = await apiResponse.json();
+            const metrics = dataPayload.current_weather;
 
-// Bind routing listeners
-navLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const targetView = link.getAttribute('data-target');
-    handleRouting(targetView);
-  });
-});
-
-// ==========================================================================
-// 2. COMPONENT MODULE: STATE-MANAGED TASK ENGINE (CRUD)
-// ==========================================================================
-let todos = JSON.parse(localStorage.getItem('todos')) || [];
-let currentFilter = 'all';
-
-const todoForm = document.getElementById('todo-form');
-const todoInput = document.getElementById('todo-input');
-const todoList = document.getElementById('todo-list');
-const filterButtons = document.querySelectorAll('.filter-btn');
-
-function saveTodos() {
-  localStorage.setItem('todos', JSON.stringify(todos));
-}
-
-function renderTodos() {
-  if (!todoList) return;
-  todoList.innerHTML = '';
-
-  const filteredTodos = todos.filter(todo => {
-    if (currentFilter === 'active') return !todo.completed;
-    if (currentFilter === 'completed') return todo.completed;
-    return true;
-  });
-
-  filteredTodos.forEach(todo => {
-    const li = document.createElement('li');
-    li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
-    li.dataset.id = todo.id;
-    li.innerHTML = `
-      <span>${todo.text}</span>
-      <div class="todo-actions">
-        <button class="todo-btn complete-btn">${todo.completed ? 'Undo' : 'Done'}</button>
-        <button class="todo-btn delete-btn">Delete</button>
-      </div>
-    `;
-    todoList.appendChild(li);
-  });
-}
-
-if (todoForm) {
-  todoForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const taskText = todoInput.value.trim();
-    if (!taskText) return;
-    todos.push({ id: Date.now().toString(), text: taskText, completed: false });
-    saveTodos();
-    renderTodos();
-    todoInput.value = '';
-  });
-}
-
-if (todoList) {
-  todoList.addEventListener('click', (e) => {
-    const target = e.target;
-    const todoItem = target.closest('.todo-item');
-    if (!todoItem) return;
-    const todoId = todoItem.dataset.id;
-
-    if (target.classList.contains('complete-btn')) {
-      todos = todos.map(todo => todo.id === todoId ? { ...todo, completed: !todo.completed } : todo);
-    }
-    if (target.classList.contains('delete-btn')) {
-      todos = todos.filter(todo => todo.id !== todoId);
-    }
-    saveTodos();
-    renderTodos();
-  });
-}
-
-if (filterButtons) {
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      filterButtons.forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      currentFilter = e.target.dataset.filter;
-      renderTodos();
-    });
-  });
-}
-
-// ==========================================================================
-// 3. COMPONENT MODULE: ASYNCHRONOUS WEATHER ANALYTICS ENGINE
-// ==========================================================================
-const cityInput = document.getElementById('weather-city');
-const searchBtn = document.getElementById('weather-search-btn');
-const statusDiv = document.getElementById('weather-status');
-const displayDiv = document.getElementById('weather-display');
-const cityNameHeading = document.getElementById('display-city-name');
-
-const tempText = document.getElementById('metric-temp');
-const humidityText = document.getElementById('metric-humidity');
-const windText = document.getElementById('metric-wind');
-
-async function fetchWeatherData() {
-  const cityName = cityInput.value.trim();
-  if (!cityName) {
-    if (statusDiv) statusDiv.textContent = "Please enter a valid city name.";
-    return;
-  }
-
-  if (statusDiv) {
-    statusDiv.style.color = "#f59e0b";
-    statusDiv.textContent = "Connecting to REST API endpoints...";
-  }
-  if (displayDiv) displayDiv.style.opacity = "0.4";
-
-  try {
-    const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`;
-    const geoResponse = await fetch(geoUrl);
-    
-    if (!geoResponse.ok) throw new Error("Geocoding payload collection failure.");
-    const geoData = await geoResponse.json();
-
-    if (!geoData.results || geoData.results.length === 0) {
-      throw new Error(`Location targets for "${cityName}" returned empty.`);
+            displayNode.innerHTML = `
+                <div class="telemetry-card metric-blue">
+                    <h4>Regional Core Temperature</h4>
+                    <div class="metric-value-display">${metrics.temperature}°C</div>
+                </div>
+                <div class="telemetry-card metric-emerald">
+                    <h4>Wind Velocity Vector</h4>
+                    <div class="metric-value-display">${metrics.windspeed} km/h</div>
+                </div>
+                <div class="telemetry-card metric-purple">
+                    <h4>API Endpoint Diagnostic</h4>
+                    <div class="metric-value-display" style="font-size: 1.5rem; color: var(--color-success); margin-top: 1rem;">200 OK STATUS</div>
+                </div>
+            `;
+        } catch (error) {
+            displayNode.innerHTML = `
+                <div class="telemetry-card metric-danger" style="grid-column: 1 / -1;">
+                    <h4>Network Execution Pipeline Disrupted</h4>
+                    <p>${error.message}. Verification failure on host external data connection tracks.</p>
+                </div>
+            `;
+        }
     }
 
-    const { latitude, longitude, name, country } = geoData.results[0];
+    // -------------------------------------------------------------------------
+    // MODULE 3 LOGIC INTERFACE - LOCAL STORAGE DATA MESH
+    // -------------------------------------------------------------------------
+    function initTaskManager() {
+        const rawLocalStorageCache = localStorage.getItem('aerodesk_workspace_tasks');
+        workspaceTasks = rawLocalStorageCache ? JSON.parse(rawLocalStorageCache) : [];
+        
+        renderTaskList();
 
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m`;
-    const weatherResponse = await fetch(weatherUrl);
-    
-    if (!weatherResponse.ok) throw new Error("Weather analytics telemetry stream failure.");
-    const weatherData = await weatherResponse.json();
-    const currentMetrics = weatherData.current;
-
-    if (cityNameHeading) cityNameHeading.textContent = `${name}, ${country}`;
-    if (tempText) tempText.textContent = `${Math.round(currentMetrics.temperature_2m)}°C`;
-    if (humidityText) humidityText.textContent = `${currentMetrics.relative_humidity_2m}%`;
-    if (windText) windText.textContent = `${currentMetrics.wind_speed_10m} km/h`;
-
-    if (statusDiv) statusDiv.textContent = "";
-    if (displayDiv) {
-      displayDiv.style.display = "block";
-      displayDiv.style.opacity = "1";
+        document.getElementById('add-task-btn').addEventListener('click', commitTaskAction);
+        document.getElementById('task-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') commitTaskAction();
+        });
     }
 
-  } catch (error) {
-    if (statusDiv) {
-      statusDiv.style.color = "#ef4444";
-      statusDiv.textContent = `Error: ${error.message}`;
+    function commitTaskAction() {
+        const inputDomRef = document.getElementById('task-input');
+        const cleanedTextPayload = inputDomRef.value.trim();
+        if (!cleanedTextPayload) return;
+
+        workspaceTasks.push({ id: Date.now(), text: cleanedTextPayload, completed: false });
+        syncToHardwareStorage();
+        inputDomRef.value = '';
+        renderTaskList();
     }
-    if (displayDiv) displayDiv.style.display = "none";
-  }
-}
 
-if (searchBtn) searchBtn.addEventListener('click', fetchWeatherData);
-if (cityInput) {
-  cityInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') fetchWeatherData();
-  });
-}
+    function toggleTaskState(targetNodeId) {
+        workspaceTasks = workspaceTasks.map(taskItem => 
+            taskItem.id === targetNodeId ? Object.assign({}, taskItem, { completed: !taskItem.completed }) : taskItem
+        );
+        syncToHardwareStorage();
+        renderTaskList();
+    }
 
-// Initial Core Execution Boot Sequence
-renderTodos();
+    function purgeTaskAction(targetNodeId) {
+        workspaceTasks = workspaceTasks.filter(taskItem => taskItem.id !== targetNodeId);
+        syncToHardwareStorage();
+        renderTaskList();
+    }
+
+    function syncToHardwareStorage() {
+        localStorage.setItem('aerodesk_workspace_tasks', JSON.stringify(workspaceTasks));
+    }
+
+    function renderTaskList() {
+        const displayContainerNode = document.getElementById('task-list-container');
+        const trackingMetricsCountNode = document.getElementById('task-metric-count');
+        if (!displayContainerNode) return;
+        
+        trackingMetricsCountNode.innerText = `Metrics Summary: ${workspaceTasks.length} Total Committed Record Items`;
+
+        if (workspaceTasks.length === 0) {
+            displayContainerNode.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%; padding: 2rem; border: 1px dashed var(--border-glass); border-radius: 12px;">The local physical allocation parameters are currently clear.</p>`;
+            return;
+        }
+
+        displayContainerNode.innerHTML = '';
+        workspaceTasks.forEach(function (taskNode) {
+            const listRowItemElement = document.createElement('li');
+            listRowItemElement.className = `task-item ${taskNode.completed ? 'completed' : ''}`;
+            listRowItemElement.innerHTML = `
+                <div id="toggle-trigger-${taskNode.id}" style="display: flex; align-items: center; gap: 1rem; width: 85%; cursor: pointer;">
+                    <input type="checkbox" ${taskNode.completed ? 'checked' : ''} style="cursor: pointer;">
+                    <span>${taskNode.text}</span>
+                </div>
+                <button class="purge-action-btn" id="delete-trigger-${taskNode.id}">Purge</button>
+            `;
+            displayContainerNode.appendChild(listRowItemElement);
+
+            document.getElementById(`toggle-trigger-${taskNode.id}`).addEventListener('click', () => toggleTaskState(taskNode.id));
+            document.getElementById(`delete-trigger-${taskNode.id}`).addEventListener('click', (e) => { e.stopPropagation(); purgeTaskAction(taskNode.id); });
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // MODULE 4 LOGIC INTERFACE - COMPLETE CAPSTONE STATE CARGO PIPELINE
+    // -------------------------------------------------------------------------
+    window.addAssetToCart = function (name, price) {
+        assetCart.push({ id: Date.now(), name: name, price: price });
+        window.renderAssetCart();
+    };
+
+    window.removeAssetFromCart = function (id) {
+        assetCart = assetCart.filter(item => item.id !== id);
+        window.renderAssetCart();
+    };
+
+    window.renderAssetCart = function () {
+        const wrapper = document.getElementById('cart-items-wrapper');
+        const totalText = document.getElementById('cart-total-value');
+        if (!wrapper) return;
+
+        if (assetCart.length === 0) {
+            wrapper.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 1.5rem;">Cart is empty.</p>`;
+            totalText.innerText = "$0.00";
+            return;
+        }
+
+        wrapper.innerHTML = '';
+        let totalSum = 0;
+
+        assetCart.forEach(function (item) {
+            totalSum += item.price;
+            const row = document.createElement('div');
+            row.className = 'cart-item-row';
+            row.innerHTML = `
+                <span style="font-size:0.9rem; color: var(--text-primary); font-weight: 500;">${item.name}</span>
+                <div style="display:flex; align-items:center; gap:0.75rem;">
+                    <span style="font-weight:700; color:var(--accent-glow); font-size:0.9rem;">$${item.price}</span>
+                    <span style="color:var(--color-danger); cursor:pointer; font-weight:bold; font-size:0.8rem;" onclick="window.removeAssetFromCart(${item.id})">✕</span>
+                </div>
+            `;
+            wrapper.appendChild(row);
+        });
+
+        totalText.innerText = `$${totalSum.toFixed(2)}`;
+    };
+
+    window.processAssetCheckout = function () {
+        if (assetCart.length === 0) {
+            alert("Handshake Aborted: Checkout card requires active items.");
+            return;
+        }
+        alert(`Deployment Authorized! Successfully injected ${assetCart.length} modules into AeroDesk Core runtime.`);
+        assetCart = [];
+        window.renderAssetCart();
+    };
+
+    // -------------------------------------------------------------------------
+    // APPLICATION SYSTEMS BOOTSTRAPPING TRACKS
+    // -------------------------------------------------------------------------
+    window.addEventListener('hashchange', routerController);
+    window.addEventListener('load', routerController);
+})();

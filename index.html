@@ -1,103 +1,838 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PardhivDev - Professional Capstone Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroDesk Core - Advanced Workspace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #030712;
+            color: #f3f4f6;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* Sidebar Design */
+        aside {
+            width: 260px;
+            background-color: #0b0f19;
+            border-right: 1px solid #1f2937;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-section h1 {
+            font-size: 1.5rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-section h1::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background-color: #1e293b;
+            color: #38bdf8;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: #9ca3af;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            background-color: #111827;
+            color: #38bdf8;
+            border: 1px solid #1f2937;
+        }
+
+        .nav-item:hover:not(.active) {
+            background-color: #1f2937;
+            color: #ffffff;
+        }
+
+        /* Metrics Panel */
+        .sidebar-footer {
+            border-top: 1px solid #1f2937;
+            padding-top: 1.5rem;
+        }
+
+        .footer-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #38bdf8;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            color: #9ca3af;
+        }
+
+        .metric-value {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .metric-value.green {
+            color: #10b981;
+        }
+
+        .status-dot {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #4b5563;
+            margin-top: 0.5rem;
+        }
+
+        /* Main Workspace App Layout */
+        main {
+            flex: 1;
+            padding: 4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #030712;
+            width: calc(100% - 260px);
+            overflow-y: auto;
+        }
+
+        .view-panel {
+            width: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .view-panel.active-panel {
+            display: flex;
+        }
+
+        .workspace-card {
+            background-color: #0b0f19;
+            border: 1px solid #1f2937;
+            border-radius: 1.25rem;
+            padding: 4rem 3rem;
+            max-width: 850px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .workspace-card h2 {
+            color: #ffffff;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .workspace-card p {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            max-width: 680px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            justify-content: center;
+        }
+
+        .badge {
+            background-color: #111827;
+            color: #3b82f6;
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #1f2937;
+        }
+
+        /* Shared Form Inputs */
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        .workspace-input {
+            flex: 1;
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .workspace-input:focus {
+            border-color: #3b82f6;
+        }
+
+        .workspace-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .workspace-btn:hover {
+            background-color: #2563eb;
+        }
+
+        /* Weather UI Elements */
+        .weather-display {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            text-align: left;
+            display: none;
+        }
+
+        .weather-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .weather-data-card {
+            background: #111827;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid #1f2937;
+        }
+
+        .weather-data-card span {
+            display: block;
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-data-card strong {
+            font-size: 1.75rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Task Manager UI Elements */
+        .todo-list-container {
+            max-width: 550px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            padding: 1rem 1.25rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .todo-item:hover {
+            border-color: #374151;
+        }
+
+        .todo-text {
+            color: #e5e7eb;
+            font-size: 1rem;
+            cursor: pointer;
+            user-select: none;
+            flex: 1;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            color: #4b5563;
+        }
+
+        .todo-delete-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .todo-delete-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .todo-actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 550px;
+            margin: 1.5rem auto 0 auto;
+            padding-top: 1rem;
+            border-top: 1px solid #1f2937;
+        }
+
+        .todo-counter {
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+
+        .clear-completed-btn {
+            background: none;
+            border: none;
+            color: #38bdf8;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .clear-completed-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Marketplace UI Grid Elements */
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            text-align: left;
+            margin-top: 1rem;
+        }
+
+        .market-card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s;
+        }
+
+        .market-card:hover {
+            border-color: #3b82f6;
+        }
+
+        .market-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .market-title {
+            color: #ffffff;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .market-tag {
+            font-size: 0.75rem;
+            background-color: #1e293b;
+            color: #38bdf8;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .market-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .market-price {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .install-btn {
+            background-color: #1f2937;
+            color: #ffffff;
+            border: 1px solid #374151;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .install-btn:hover {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .install-btn.installed {
+            background-color: #065f46;
+            color: #34d399;
+            border-color: #065f46;
+            cursor: default;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Modular Navigation Architecture -->
-  <header>
-    <nav class="nav-container">
-      <div class="logo">PardhivDev</div>
-      <div class="nav-links">
-        <a href="#" class="nav-link active" data-target="home">Home</a>
-        <a href="#" class="nav-link" data-target="weather">Weather App</a>
-        <a href="#" class="nav-link" data-target="todo">Task Manager</a>
-      </div>
-    </nav>
-  </header>
+    <div id="home-page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; background-color: #030712; text-align: center; padding: 2rem;">
+        <h1 style="color: #ffffff; font-size: 4rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.03em;">
+            AeroDesk<span style="color: #10b981;">.</span>
+        </h1>
+        <p style="color: #94a3b8; font-size: 1.25rem; max-width: 600px; margin-bottom: 2.5rem; line-height: 1.6;">
+            A next-generation, high-performance developer workspace built for speed and complete modular control.
+        </p>
+        <button id="launch-btn" style="background-color: #3b82f6; color: white; border: none; padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: 600; border-radius: 0.5rem; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4);">
+            Launch AeroDesk Workspace →
+        </button>
+    </div>
 
-  <!-- Client-Side Routed View Router Container -->
-  <main id="view-router">
-    
-    <!-- 1. HOME VIEW VIEW -->
-    <section id="view-home" class="router-view active">
-      <div class="hero-section">
-        <h1>Welcome to My Capstone Platform</h1>
-        <p>A production-ready Single Page Application demonstrating client-side routing, asynchronous data integration, and modular component state manipulation.</p>
-        <div class="tech-badge-grid">
-          <span class="badge">Vanilla JS Architecture</span>
-          <span class="badge">REST APIs</span>
-          <span class="badge">Client Routing</span>
-          <span class="badge">Production Optimized</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. WEATHER VIEW -->
-    <section id="view-weather" class="router-view">
-      <div class="component-header">
-        <h2>Real-Time Weather Analytics</h2>
-        <p>Fetching multi-layered nested JSON data streams instantly via an asynchronous Fetch engine.</p>
-      </div>
-      
-      <div class="weather-app">
-        <div class="search-box">
-          <input type="text" id="weather-city" placeholder="Enter city name (e.g., Hyderabad, London)">
-          <button id="weather-search-btn">Search Weather</button>
-        </div>
-        <div id="weather-status"></div>
+    <div id="dashboard-page" style="display: none; height: 100vh; width: 100vw;">
         
-        <div id="weather-display" style="display: none;">
-          <h3 id="display-city-name">--</h3>
-          <div class="weather-grid">
-            <div class="weather-card">
-              <h4>Temperature</h4>
-              <p id="metric-temp" class="weather-value">--°C</p>
+        <aside>
+            <div class="top-side">
+                <div class="brand-section">
+                    <h1 id="brand-home-link" style="cursor: pointer;">AeroDesk</h1>
+                    <span class="version-badge">v1.0.0 CORE</span>
+                </div>
+                
+                <nav class="nav-links">
+                    <div id="nav-home" class="nav-item active">🏠 Home Workspace</div>
+                    <div id="nav-weather" class="nav-item">🔬 Real-Time Weather Analytics</div>
+                    <div id="nav-todo" class="nav-item">📋 Task Manager</div>
+                    <div id="nav-market" class="nav-item">📦 Asset Marketplace</div>
+                </nav>
             </div>
-            <div class="weather-card">
-              <h4>Humidity</h4>
-              <p id="metric-humidity" class="weather-value">--%</p>
+
+            <div class="sidebar-footer">
+                <div class="footer-title">Engine Real-Time Metrics</div>
+                <div class="metric-row"><span>Active DOM Nodes:</span><span class="metric-value">84</span></div>
+                <div class="metric-row"><span>Render Loop Speed:</span><span class="metric-value green">5.40 ms</span></div>
+                <div class="status-dot">Runtime Shell: Active</div>
+                <div class="copyright">&copy; 2026 AeroDesk Core SPA</div>
             </div>
-            <div class="weather-card">
-              <h4>Wind Speed</h4>
-              <p id="metric-wind" class="weather-value">-- km/h</p>
+        </aside>
+
+        <main>
+            <div id="panel-home" class="view-panel active-panel">
+                <div class="workspace-card">
+                    <h2>Welcome to AeroDesk</h2>
+                    <p>
+                        A production-ready dashboard demonstrating client-side routing, 
+                        asynchronous data integration, and modular component state manipulation.
+                    </p>
+                    <div class="badge-container">
+                        <span class="badge">Vanilla JS Architecture</span>
+                        <span class="badge">REST APIs</span>
+                        <span class="badge">Client Routing</span>
+                        <span class="badge">Production Optimized</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- 3. TASK MANAGER VIEW -->
-    <section id="view-todo" class="router-view">
-      <div class="component-header">
-        <h2>State-Managed Task Engine</h2>
-        <p>Comprehensive local storage CRUD architecture managing real-time array filtration states.</p>
-      </div>
+            <div id="panel-weather" class="view-panel">
+                <div class="workspace-card" style="text-align: center;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Real-Time Weather Analytics</h2>
+                    <p style="font-size: 1rem; color: #94a3b8; margin-bottom: 2rem;">Live Global Atmospheric Data Stream Metrics</p>
+                    
+                    <div class="search-box">
+                        <input type="text" id="city-input" class="workspace-input" placeholder="Enter global city name... (e.g. Hyderabad, London)">
+                        <button id="search-btn" class="workspace-btn">Fetch Stream</button>
+                    </div>
 
-      <div class="todo-app">
-        <form id="todo-form">
-          <input type="text" id="todo-input" placeholder="Add a new production task..." required>
-          <button type="submit">Add Task</button>
-        </form>
-        <div class="filter-container">
-          <button class="filter-btn active" data-filter="all">All Tasks</button>
-          <button class="filter-btn" data-filter="active">Active</button>
-          <button class="filter-btn" data-filter="completed">Completed</button>
-        </div>
-        <ul id="todo-list"></ul>
-      </div>
-    </section>
+                    <div id="weather-result" class="weather-display">
+                        <h3 id="weather-location" style="color: #38bdf8; font-size: 1.5rem; margin-bottom: 1rem;">City Name</h3>
+                        <div class="weather-metrics-grid">
+                            <div class="weather-data-card">
+                                <span>Core Temperature</span>
+                                <strong id="weather-temp">-- °C</strong>
+                            </div>
+                            <div class="weather-data-card">
+                                <span>Condition Parameters</span>
+                                <strong id="weather-desc">--</strong>
+                            </div>
+                            <div class="weather-data-card">
+                                <span>Humidity Core Index</span>
+                                <strong id="weather-humidity">-- %</strong>
+                            </div>
+                            <div class="weather-data-card">
+                                <span>Velocity Wind Speed</span>
+                                <strong id="weather-wind">-- km/h</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  </main>
+            <div id="panel-todo" class="view-panel">
+                <div class="workspace-card" style="text-align: center;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Task Manager</h2>
+                    <p style="font-size: 1rem; color: #94a3b8; margin-bottom: 2rem;">Persistent Client-Side To-Do Engine Stack</p>
+                    
+                    <div class="search-box">
+                        <input type="text" id="todo-input" class="workspace-input" placeholder="Add a new custom objective workspace thread...">
+                        <button id="add-todo-btn" class="workspace-btn">Push Task</button>
+                    </div>
 
-  <footer>
-    <p>&copy; 2026 Pardhiv Developer. Full-Stack Capstone Build. All rights reserved.</p>
-  </footer>
+                    <div class="todo-list-container" id="todo-container"></div>
 
-  <script src="app.js"></script>
+                    <div class="todo-actions-row">
+                        <span id="todo-count" class="todo-counter">0 objectives remaining</span>
+                        <button id="clear-completed-btn" class="clear-completed-btn">Clear Completed</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="panel-market" class="view-panel">
+                <div class="workspace-card" style="max-width: 900px;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Asset Marketplace</h2>
+                    <p style="font-size: 1rem; color: #94a3b8; margin-bottom: 2rem;">Discover, query, and inject pre-built developer modules into runtime shell environments.</p>
+                    
+                    <div class="search-box">
+                        <input type="text" id="market-search" class="workspace-input" placeholder="Search assets... (e.g. Neo, Chart, Git)">
+                    </div>
+
+                    <div class="marketplace-grid" id="market-grid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const homePage = document.getElementById('home-page');
+        const dashboardPage = document.getElementById('dashboard-page');
+        const launchBtn = document.getElementById('launch-btn');
+        const brandHomeLink = document.getElementById('brand-home-link');
+
+        const panels = {
+            home: document.getElementById('panel-home'),
+            weather: document.getElementById('panel-weather'),
+            todo: document.getElementById('panel-todo'),
+            market: document.getElementById('panel-market')
+        };
+
+        const navItems = {
+            home: document.getElementById('nav-home'),
+            weather: document.getElementById('nav-weather'),
+            todo: document.getElementById('nav-todo'),
+            market: document.getElementById('nav-market')
+        };
+
+        function showPanel(targetKey) {
+            Object.keys(panels).forEach(key => {
+                if (key === targetKey) {
+                    panels[key].classList.add('active-panel');
+                    navItems[key].classList.add('active');
+                } else {
+                    panels[key].classList.remove('active-panel');
+                    navItems[key].classList.remove('active');
+                }
+            });
+        }
+
+        launchBtn.addEventListener('click', () => {
+            homePage.style.display = 'none';
+            dashboardPage.style.display = 'flex';
+            showPanel('home');
+        });
+
+        brandHomeLink.addEventListener('click', () => { showPanel('home'); });
+
+        navItems.home.addEventListener('click', () => showPanel('home'));
+        navItems.weather.addEventListener('click', () => showPanel('weather'));
+        navItems.todo.addEventListener('click', () => showPanel('todo'));
+        navItems.market.addEventListener('click', () => showPanel('market'));
+
+        // ========================================== 
+        // WEATHER ENGINE APPLICATION LOGIC
+        // ========================================== 
+        const cityInput = document.getElementById('city-input');
+        const searchBtn = document.getElementById('search-btn');
+        const weatherResult = document.getElementById('weather-result');
+        
+        const wLocation = document.getElementById('weather-location');
+        const wTemp = document.getElementById('weather-temp');
+        const wDesc = document.getElementById('weather-desc');
+        const wHumidity = document.getElementById('weather-humidity');
+        const wWind = document.getElementById('weather-wind');
+
+        function interpretWMOCode(code) {
+            if (code === 0) return "Clear Sky";
+            if ([1, 2, 3].includes(code)) return "Mainly Clear / Partly Cloudy";
+            if ([45, 48].includes(code)) return "Foggy Weather";
+            if ([51, 53, 55, 61, 63, 65].includes(code)) return "Rainy Showers";
+            if ([71, 73, 75, 77, 85, 86].includes(code)) return "Snow Showers";
+            if ([80, 81, 82].includes(code)) return "Heavy Rain Storms";
+            if ([95, 96, 99].includes(code)) return "Thunderstorm Active";
+            return "Stable Atmospheric Grid";
+        }
+
+        async function fetchWeatherData() {
+            const cityName = cityInput.value.trim();
+            if (!cityName) return alert("Please specify a targeted data city name.");
+
+            searchBtn.textContent = "Querying...";
+            
+            try {
+                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`);
+                if (!geoResponse.ok) throw new Error("Geocoding terminal pipeline breakdown");
+                
+                const geoData = await geoResponse.json();
+                if (!geoData.results || geoData.results.length === 0) {
+                    throw new Error("Specified area node not registered in global registry maps.");
+                }
+
+                const targetLocation = geoData.results[0];
+                const lat = targetLocation.latitude;
+                const lon = targetLocation.longitude;
+
+                const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m`);
+                if (!weatherResponse.ok) throw new Error("Atmospheric dataset stream failure");
+
+                const weatherData = await weatherResponse.json();
+                const currentMetrics = weatherData.current;
+
+                wLocation.textContent = `📍 Area Node: ${targetLocation.name}, ${targetLocation.country || 'Global Grid'}`;
+                wTemp.textContent = `${Math.round(currentMetrics.temperature_2m)} °C`;
+                wDesc.textContent = interpretWMOCode(currentMetrics.weather_code);
+                wHumidity.textContent = `${currentMetrics.relative_humidity_2m} %`;
+                wWind.textContent = `${currentMetrics.wind_speed_10m} km/h`;
+
+                weatherResult.style.display = "block";
+            } catch (err) {
+                alert(err.message || "Error reading data node pipeline. Check city spelling configuration.");
+                console.error(err);
+            } finally {
+                searchBtn.textContent = "Fetch Stream";
+            }
+        }
+
+        searchBtn.addEventListener('click', fetchWeatherData);
+        cityInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') fetchWeatherData(); });
+
+        // ========================================== 
+        // TASK MANAGER PERSISTENCE STATE ENGINE
+        // ========================================== 
+        const todoInput = document.getElementById('todo-input');
+        const addTodoBtn = document.getElementById('add-todo-btn');
+        const todoContainer = document.getElementById('todo-container');
+        const todoCount = document.getElementById('todo-count');
+        const clearCompletedBtn = document.getElementById('clear-completed-btn');
+
+        let todoItems = JSON.parse(localStorage.getItem('AERODESK_TODOS')) || [
+            { id: 1, text: "Configure strategic SPA router architecture", completed: true },
+            { id: 2, text: "Connect live Open-Meteo telemetry API geocode hooks", completed: false }
+        ];
+
+        function saveAndRender() {
+            localStorage.setItem('AERODESK_TODOS', JSON.stringify(todoItems));
+            todoContainer.innerHTML = "";
+            const activeCount = todoItems.filter(t => !t.completed).length;
+            todoCount.textContent = `${activeCount} objective${activeCount === 1 ? '' : 's'} remaining`;
+
+            if (todoItems.length === 0) {
+                todoContainer.innerHTML = `<p style='text-align: center; color: #4b5563; font-size: 0.95rem; padding-top: 1rem;'>Stack is completely clear. No tasks initialized.</p>`;
+                return;
+            }
+
+            todoItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "todo-item";
+
+                const textSpan = document.createElement('span');
+                textSpan.className = `todo-text ${item.completed ? 'completed' : ''}`;
+                textSpan.textContent = item.text;
+                textSpan.addEventListener('click', () => {
+                    item.completed = !item.completed;
+                    saveAndRender();
+                });
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = "todo-delete-btn";
+                deleteBtn.textContent = "Remove";
+                deleteBtn.addEventListener('click', () => {
+                    todoItems = todoItems.filter(t => t.id !== item.id);
+                    saveAndRender();
+                });
+
+                itemDiv.appendChild(textSpan);
+                itemDiv.appendChild(deleteBtn);
+                todoContainer.appendChild(itemDiv);
+            });
+        }
+
+        function addTodoElement() {
+            const val = todoInput.value.trim();
+            if (!val) return;
+            todoItems.push({ id: Date.now(), text: val, completed: false });
+            todoInput.value = "";
+            saveAndRender();
+        }
+
+        addTodoBtn.addEventListener('click', addTodoElement);
+        todoInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTodoElement(); });
+        clearCompletedBtn.addEventListener('click', () => {
+            todoItems = todoItems.filter(t => !t.completed);
+            saveAndRender();
+        });
+
+        saveAndRender();
+
+        // ========================================== 
+        // ASSET MARKETPLACE ENGINE LOGIC
+        // ========================================== 
+        const marketGrid = document.getElementById('market-grid');
+        const marketSearch = document.getElementById('market-search');
+
+        // Central array dataset mapping premium extension assets available for runtime hook installation
+        const marketplaceAssets = [
+            { id: 'asset-1', title: 'Neo-Dark Editor Core', desc: 'High-contrast theme wrapper package providing custom token matching schemas.', tag: 'Theme', price: 'Free' },
+            { id: 'asset-2', title: 'Telemetry Chart Engine', desc: 'Client canvas graphics driver optimized for plotting asynchronous JSON matrix arrays.', tag: 'Analytics', price: 'Free' },
+            { id: 'asset-3', title: 'Git Context Watcher', desc: 'Automated daemon hooks monitoring local project directory sub-branch updates.', tag: 'Utility', price: 'Free' },
+            { id: 'asset-4', title: 'Markdown Parser Deck', desc: 'Real-time string token interpreter converting raw text files directly into formatted HTML views.', tag: 'Parser', price: 'Free' }
+        ];
+
+        // Tracker matrix to simulate client browser runtime installation states
+        let installedAssets = JSON.parse(localStorage.getItem('AERODESK_INSTALLED_ASSETS')) || [];
+
+        function renderMarketplace(filterString = "") {
+            marketGrid.innerHTML = "";
+            
+            const matchedAssets = marketplaceAssets.filter(asset => 
+                asset.title.toLowerCase().includes(filterString.toLowerCase()) ||
+                asset.tag.toLowerCase().includes(filterString.toLowerCase())
+            );
+
+            if (matchedAssets.length === 0) {
+                marketGrid.innerHTML = `<p style="grid-column: span 2; text-align: center; color: #4b5563; padding: 2rem 0;">No modular workspace extensions matched your query filter configuration.</p>`;
+                return;
+            }
+
+            matchedAssets.forEach(asset => {
+                const isInstalled = installedAssets.includes(asset.id);
+
+                const card = document.createElement('div');
+                card.className = "market-card";
+                card.innerHTML = `
+                    <div class="market-header">
+                        <span class="market-title">${asset.title}</span>
+                        <span class="market-tag">${asset.tag}</span>
+                    </div>
+                    <p class="market-desc">${asset.desc}</p>
+                    <div class="market-footer">
+                        <span class="market-price">${asset.price}</span>
+                        <button class="install-btn ${isInstalled ? 'installed' : ''}" data-id="${asset.id}">
+                            ${isInstalled ? '✓ Active Node' : 'Deploy Module'}
+                        </button>
+                    </div>
+                `;
+
+                // Add install listener trigger
+                const btn = card.querySelector('.install-btn');
+                if (!isInstalled) {
+                    btn.addEventListener('click', () => {
+                        installedAssets.push(asset.id);
+                        localStorage.setItem('AERODESK_INSTALLED_ASSETS', JSON.stringify(installedAssets));
+                        renderMarketplace(marketSearch.value);
+                    });
+                }
+
+                marketGrid.appendChild(card);
+            });
+        }
+
+        // Add keystroke listener to filter assets in real-time
+        marketSearch.addEventListener('input', (e) => {
+            renderMarketplace(e.target.value);
+        });
+
+        // Initialize compiler load out
+        renderMarketplace();
+    </script>
+
 </body>
 </html>
